@@ -2,13 +2,23 @@
 
 package Class::Workflow::State::TransitionSet;
 use Moose::Role;
+use Moose::Util::TypeConstraints;
 
 use Set::Object;
 
-has transition_set => (
-	isa     => "Set::Object",
-	is      => "rw",
-	default => sub { Set::Object->new }
+subtype 'Set::Object'
+	=> as Object
+	=> where { $_[0]->isa("Set::Object") };
+
+coerce "Set::Object"
+	=> from ArrayRef
+	=> via { Set::Object->new(@{ $_[0] }) };
+
+has transitions => (
+	isa      => "Set::Object",
+	coerce   => 1,
+	accessor => "transition_set",
+	default  => sub { Set::Object->new },
 );
 
 sub transitions {
@@ -29,7 +39,7 @@ sub add_transitions {
 
 sub has_transition {
 	my ( $self, $transition ) = @_;
-	$self->transition_set->contains( $transition );
+	$self->transition_set->includes( $transition );
 }
 
 sub has_transitions {

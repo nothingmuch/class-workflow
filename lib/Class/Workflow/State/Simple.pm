@@ -14,21 +14,6 @@ has name => (
 	is  => "rw",
 );
 
-sub accept_instance { };
-
-around new => sub {
-	my $next = shift;
-	my ( $class, %params ) = @_;
-
-	my $transitions = delete $params{transitions};
-
-	my $self = $class->$next( %params );
-
-	$self->transitions( @$transitions );
-
-	$self;
-};
-
 __PACKAGE__;
 
 __END__

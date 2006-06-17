@@ -8,7 +8,7 @@ requires "transitions"; # enumerate the transitions
 requires "has_transition";
 requires "has_transitions";
 
-requires "accept_instance";
+sub accept_instance {}
 
 __PACKAGE__;
 
