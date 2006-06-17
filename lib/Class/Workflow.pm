@@ -132,8 +132,7 @@ sub create_or_set_[% field %] {
 
 	my $name = $attrs{name} || croak "Every [% field %] must have a name";
 
-	$attrs{transitions} = [ $self->autovivify_transitions( @{ $attrs{transitions} } ) ] if exists $attrs{transitions};
-	$attrs{to_state}    = $self->state( $attrs{to_state} ) if exists $attrs{to_state};
+	$self->expand_attrs( \%attrs );
 
 	if ( my $obj = $self->get_[% field %]( $name ) ) {
 		delete $attrs{name};
@@ -149,6 +148,15 @@ sub create_or_set_[% field %] {
 
 [% END %]
 no tt;
+
+sub expand_attrs {
+	my ($self, $attrs ) = @_;
+
+	# TODO generalize with Data::Visitor and a list of suspect attrs
+	$attrs->{transitions} = [ $self->autovivify_transitions( @{ $attrs->{transitions} } ) ] if exists $attrs->{transitions};
+	$attrs->{transition}  = $self->transition( $attrs->{transition} ) if exists $attrs->{transition};
+	$attrs->{to_state}    = $self->state( $attrs->{to_state} ) if exists $attrs->{to_state};
+}
 
 __PACKAGE__;
 
