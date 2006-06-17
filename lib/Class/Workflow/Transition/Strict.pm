@@ -20,13 +20,28 @@ __END__
 
 =head1 NAME
 
-Class::Workflow::Transition::Strict - 
+Class::Workflow::Transition::Strict - Verify that the transaction is in the
+instance's current state before applying.
 
 =head1 SYNOPSIS
 
-	use Class::Workflow::Transition::Strict;
+	package MyTransaction;
+	use Moose;
+
+	with qw/
+		Class::Workflow::Transition
+		Class::Workflow::Transition::Strict
+	/;
 
 =head1 DESCRIPTION
+
+This mixin role provides a L<Moose/before> wrapper around the C<apply> method,
+that verifies that the transition is present in the current state of the
+instance.
+
+Normally you use the state introspection methods to retrieve transition
+objects from the state of the instance directly, but this role adds an extra
+level of protection.
 
 =cut
 
