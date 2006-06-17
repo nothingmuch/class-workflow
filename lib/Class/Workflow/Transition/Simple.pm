@@ -30,7 +30,7 @@ has validator => (
 has ignore_rv => (
 	isa => "Bool",
 	is  => "rw",
-	default => 0,
+	default => 1,
 );
 
 sub apply_body {
