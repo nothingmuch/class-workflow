@@ -8,8 +8,10 @@ use Carp qw/croak/;
 has to_state => (
 	does => "Class::Workflow::State",
 	is   => "rw",
+	required => 0,
 );
 
+# FIXME augment + inner
 requires "apply_body";
 
 sub apply {
@@ -17,7 +19,7 @@ sub apply {
 
 	return $self->derive_instance(
 		$instance,
-		state => $self->to_state || croak "$self has no 'to_state'",
+		state => ( $self->to_state || croak "$self has no 'to_state'" ),
 		$self->apply_body( $instance, @args ),
 	);
 }
