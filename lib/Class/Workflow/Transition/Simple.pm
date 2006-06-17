@@ -22,10 +22,11 @@ has body => (
 	default => sub { sub { return () } },
 );
 
-has validator => (
-	isa => "CodeRef",
+has validators => (
+	isa => "ArrayRef",
 	is  => "rw",
-	default => sub { sub { 1 } },
+	auto_deref => 1,
+	default    => sub { [] },
 );
 
 has ignore_rv => (
@@ -34,15 +35,49 @@ has ignore_rv => (
 	default => 1,
 );
 
+has ignore_validator_rv => (
+	isa => "Bool",
+	is  => "rw",
+	default => 0,
+);
+
 sub apply_body {
 	my ( $self, $instance, @args ) = @_;
-	my @ret = $self->body->( $instance, @args );
+	my $body = $self->body;
+	my @ret = $self->$body( $instance, @args );
 	return ( $self->ignore_rv ? () : @ret );
+}
+
+sub add_validators {
+	my ( $self, @validators ) = @_;
+	push @{ $self->validators }, @validators;
+}
+
+sub clear_validators {
+	my $self = shift;
+	$self->validators([]);
 }
 
 sub validate {
 	my ( $self, $instance, @args ) = @_;
-	$self->validator->( $instance, @args ) || die "Transition input validation error";
+
+	my $ignore_rv = $self->ignore_validator_rv;
+
+	my @errors;
+	foreach my $validator ( $self->validators ) {
+		my $ok = eval { $self->$validator->( $instance, @args ) };
+
+		if ( $@ ) {
+			push @errors, $@;
+		} elsif ( !$ignore_rv and !$ok ) {
+			push @errors, "general error";
+		}
+	}
+
+	die "Transition input validation error: @errors" if @errors;
+	# FIXME add @errors to an exception object that stringifies
+
+	return 1;
 }
 
 __PACKAGE__;
@@ -104,10 +139,38 @@ during apply, after any validation.
 It can return a list of key/value pairs, that will be passed to
 C<derive_instance> as long as C<ignore_rv> is set to false
 
-=item validator
+The body is invoked as a method on the transition.
 
-This is an optional sub ref (it defaults to C<<sub { 1 }>>) which will be called
-to validate input before applying C<body>.
+=item ignore_validator_rv
+
+This is useful if your validators only throw exceptions.
+
+Defaults to false
+
+=item validators
+
+This is an optional list of sub refs which will be called to validate input
+before applying C<body>.
+
+They should raise an exception or return a false value if the input is bad.
+
+They may put validation result information inside the
+L<Class::Workflow::Context> or equivalent, if one is used.
+
+A more comprehensive solution is to override the C<validate> method yourself
+and provide rich exception objects with validation error descriptors inside
+them.
+
+The validators are invoked as methods on the transition.
+
+IF C<ignore_validator_rv> is true then only exceptions are considered input
+validations.
+
+=item add_validators @code_refs
+
+=item clear_validators
+
+Modify the list of validators.
 
 =back
 
