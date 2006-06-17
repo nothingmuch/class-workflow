@@ -30,7 +30,36 @@ states.
 
 	use Class::Workflow::State::Simple;
 
+	my $state = Class::Workflow::State::Simple->new(
+		name => "foo",
+		transitions => [ $tn ], # objects
+	);
+
 =head1 DESCRIPTION
+
+=head1 FIELDS
+
+=over 4
+
+=item name
+
+=back
+
+=head1 ROLES
+
+This class consumes the following roles:
+
+=over 4
+
+=item *
+
+L<Class::Workflow::State::TransitionSet>
+
+=item *
+
+L<Class::Workflow::State::AcceptHooks>
+
+=back
 
 =cut
 

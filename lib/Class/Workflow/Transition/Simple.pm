@@ -111,6 +111,26 @@ to validate input before applying C<body>.
 
 =back
 
+=head1 ROLES
+
+This class consumes the following roles:
+
+=over 4
+
+=item *
+
+L<Class::Workflow::Transition::Deterministic>
+
+=item *
+
+L<Class::Workflow::Transition::Strict>
+
+=item *
+
+L<Class::Workflow::Transition::Validate>
+
+=back
+
 =cut
 
 

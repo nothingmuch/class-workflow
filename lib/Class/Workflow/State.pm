@@ -22,9 +22,49 @@ Class::Workflow::State - An instance's position in the workflow.
 
 =head1 SYNOPSIS
 
-	use Class::Workflow::State;
+	package MyState;
+	use Moose;
+
+	with 'Class::Workflow::State';
 
 =head1 DESCRIPTION
+
+This is an abstract role for state implementations. In order ot work properly all states
+
+=head1 METHODS
+
+=over 4
+
+=item accept_instance
+
+Since this method is probably not going to be used an empty version is
+supplied. You may override it.
+
+Look in L<Class::Workflow::State::AcceptHooks> for an example of how this can
+be used.
+
+=back
+
+=head1 REQUIRED METHODS
+
+=over 4
+
+=item has_transition
+
+=item has_transitions
+
+Whether or not the state contains the transition B<object> (or objects). You
+can add more behaviors but it should B<always> work for transition objects.
+
+=item transitions
+
+This method should return the list of all transition objects. You may add more
+methods that return the transitions in another organization, but make sure that
+this method called with no arguments will always return the transitions. When
+this method is called with arguments it should set the transition list to the
+new list, or die if the operation is not supported.
+
+=back
 
 =cut
 

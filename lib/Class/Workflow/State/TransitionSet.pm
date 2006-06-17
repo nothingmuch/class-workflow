@@ -65,6 +65,38 @@ data using Set::Object.
 
 =head1 DESCRIPTION
 
+This is a concrete role that implements C<transitions>, C<has_transition> and
+C<has_transitions> as required by L<Class::Workflow::State>, and adds
+C<add_transitions> as well.
+
+Transition storage is implemented internally with L<Set::Object>.
+
+Note that you may construct like this:
+
+	Class->new(
+		transitions => \@transitions,
+	);
+
+and the transition set will be coerced from that array reference.
+
+=head1 METHODS
+
+See L<Class::Workflow::State>
+
+=over 4
+
+=item has_transition
+
+=item has_transitions
+
+=item transitions
+
+=item add_transitions
+
+=item transition_set
+
+=back
+
 =cut
 
 
