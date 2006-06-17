@@ -3,6 +3,7 @@
 package Class::Workflow::State::Simple;
 use Moose;
 
+# FIXME with Class::Workflow::State should be implied
 with qw/
 	Class::Workflow::State
 	Class::Workflow::State::TransitionSet
@@ -22,7 +23,8 @@ __END__
 
 =head1 NAME
 
-Class::Workflow::State::Simple - 
+Class::Workflow::State::Simple - A useful class (or base class) for writing
+states.
 
 =head1 SYNOPSIS
 

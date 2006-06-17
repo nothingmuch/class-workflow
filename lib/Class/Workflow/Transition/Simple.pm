@@ -3,6 +3,7 @@
 package Class::Workflow::Transition::Simple;
 use Moose;
 
+# FIXME with Class::Workflow::Transition should not be necessary
 with qw/
 	Class::Workflow::Transition
 	Class::Workflow::Transition::Deterministic
