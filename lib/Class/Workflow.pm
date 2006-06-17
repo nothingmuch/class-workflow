@@ -37,6 +37,12 @@ sub new_instance {
 use tt fields => [qw/state transition/];
 [% FOREACH field IN fields %]
 
+has [% field %]_class => (
+	isa => "Str",
+	is  => "rw",
+	default => "Class::Workflow::[% field | ucfirst %]::Simple",
+);
+
 has _[% field %]s => (
 	isa => "HashRef",
 	is  => "ro",
@@ -116,10 +122,6 @@ sub create_[% field %] {
 sub construct_[% field %] {
 	my ( $self, @attrs ) = @_;
 	$self->[% field %]_class->new( @attrs );
-}
-
-sub [% field %]_class {
-	"Class::Workflow::[% field | ucfirst %]::Simple";
 }
 
 sub autovivify_[% field %]s {
