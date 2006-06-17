@@ -48,7 +48,7 @@ isa_ok( my $i = $w->new_instance, "Class::Workflow::Instance::Simple" );
 
 is( $i->state, $new, "initial state" );
 
-my $i_accepted = $accept->apply( $i );
+isa_ok( my $i_accepted = $accept->apply( $i ), "Class::Workflow::Instance::Simple");
 
 is( $i_accepted->state, $w->state("open"), "new state is correct" );
 is( $accepted_items, 1, "callback called" );

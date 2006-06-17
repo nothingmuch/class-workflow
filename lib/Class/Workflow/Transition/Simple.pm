@@ -137,7 +137,7 @@ This is an optional sub (it defaults to C<<sub { }>>) which will be called
 during apply, after any validation.
 
 It can return a list of key/value pairs, that will be passed to
-C<derive_instance> as long as C<ignore_rv> is set to false
+C<derive_and_accept_instance> as long as C<ignore_rv> is set to false
 
 The body is invoked as a method on the transition.
 

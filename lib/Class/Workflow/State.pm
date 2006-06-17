@@ -8,7 +8,10 @@ requires "transitions"; # enumerate the transitions
 requires "has_transition";
 requires "has_transitions";
 
-sub accept_instance {}
+sub accept_instance {
+	my ( $self, $instance, @args ) = @_;
+	return $instance;
+}
 
 __PACKAGE__;
 
@@ -38,7 +41,8 @@ This is an abstract role for state implementations. In order ot work properly al
 =item accept_instance
 
 Since this method is probably not going to be used an empty version is
-supplied. You may override it.
+supplied. You may override it, but be sure to return the instance (either the
+one you got, or if you applied cascaded transitions, the one that you made).
 
 Look in L<Class::Workflow::State::AcceptHooks> for an example of how this can
 be used.

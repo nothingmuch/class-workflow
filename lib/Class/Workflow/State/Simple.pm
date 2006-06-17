@@ -8,6 +8,7 @@ with qw/
 	Class::Workflow::State
 	Class::Workflow::State::TransitionSet
 	Class::Workflow::State::AcceptHooks
+	Class::Workflow::State::AutoApply
 /;
 
 has name => (
@@ -42,6 +43,13 @@ states.
 =over 4
 
 =item name
+
+A string that can be used to identify the state to a factory object like
+L<Class::Workflow>.
+
+=item auto_transition
+
+see L<Class::Workflow::State::AutoApply>.
 
 =back
 
