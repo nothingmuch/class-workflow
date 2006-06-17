@@ -3,6 +3,8 @@
 package Class::Workflow::Transition::Deterministic;
 use Moose::Role;
 
+use Carp qw/croak/;
+
 has to_state => (
 	does => "Class::Workflow::State",
 	is   => "rw",
@@ -15,7 +17,7 @@ sub apply {
 
 	return $self->derive_instance(
 		$instance,
-		state => $self->to_state,
+		state => $self->to_state || croak "$self has no 'to_state'",
 		$self->apply_body( $instance, @args ),
 	);
 }
