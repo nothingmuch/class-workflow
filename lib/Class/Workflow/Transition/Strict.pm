@@ -20,12 +20,12 @@ __END__
 
 =head1 NAME
 
-Class::Workflow::Transition::Strict - Verify that the transaction is in the
+Class::Workflow::Transition::Strict - Verify that the transition is in the
 instance's current state before applying.
 
 =head1 SYNOPSIS
 
-	package MyTransaction;
+	package MyTransition;
 	use Moose;
 
 	with qw/
