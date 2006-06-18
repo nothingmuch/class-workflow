@@ -21,8 +21,7 @@ isa_ok( $new, "Class::Workflow::State::Simple" );
 my $accepted_items = 0;
 my $accept = $w->transition( 'accept' =>
 	to_state  => "open",
-	body      => sub { $accepted_items++ },
-	ignore_rv => 1,
+	body      => sub { ++$accepted_items },
 );
 
 isa_ok( $accept, "Class::Workflow::Transition::Simple" );

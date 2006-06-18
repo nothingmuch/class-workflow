@@ -22,17 +22,10 @@ has body => (
 	default => sub { sub { return () } },
 );
 
-has ignore_rv => (
-	isa => "Bool",
-	is  => "rw",
-	default => 1,
-);
-
 sub apply_body {
 	my ( $self, $instance, @args ) = @_;
 	my $body = $self->body;
-	my @ret = $self->$body( $instance, @args );
-	return ( $self->ignore_rv ? () : @ret );
+	$self->$body( $instance, @args );
 }
 
 __PACKAGE__;
@@ -51,10 +44,10 @@ writing transitions.
 	use Class::Workflow::Transition::Simple;
 
 	my $t = Class::Workflow::Transition::Simple->new(
-		name      => "feed",
-		to_state  => $not_hungry, # Class::Workflow::Transition::State
-		ignore_rv => 0,
-		body      => sub {
+		name           => "feed",
+		to_state       => $not_hungry, # Class::Workflow::Transition::State
+		rv_to_instance => 1,
+		body           => sub {
 			my ( $self, $instance, @args ) = @_;
 
 			my $remain = $global_food_warehouse->reduce_quantity;
