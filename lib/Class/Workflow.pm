@@ -62,7 +62,7 @@ sub [% field %] {
 
 	if ( !blessed($params[0]) and !blessed($params[1]) and @params % 2 == 0 ) {
 		# $wf->state( name => "foo", transitions => [qw/bar gorch/] )
-		return $self->create_or_set_[% field %]_params( @params );
+		return $self->create_or_set_[% field %]( @params );
 	} elsif ( !ref($params[0]) and @params % 2 == 1 ) {
 		# my $state = $wf->state("new", %attrs); # create new by name, or just get_foo
 		return $self->create_or_set_[% field %]( name => @params )
