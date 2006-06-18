@@ -32,6 +32,16 @@ sub transitions {
 	}
 }
 
+sub clear_transitions {
+	my $self = shift;
+	$self->transition_set( Set::Object->new );
+}
+
+sub remove_transitions {
+	my ( $self, @transitions ) = @_;
+	$self->transition_set->remove( @transitions );
+}
+
 sub add_transitions {
 	my ( $self, @transitions ) = @_;
 	$self->transition_set->insert( @transitions );
@@ -67,9 +77,13 @@ data using Set::Object.
 
 This is a concrete role that implements C<transitions>, C<has_transition> and
 C<has_transitions> as required by L<Class::Workflow::State>, and adds
-C<add_transitions> as well.
+C<add_transitions>, C<remove_transitions> and C<clear_transitions> as well.
 
 Transition storage is implemented internally with L<Set::Object>.
+
+Unlike L<Class::Workflow::State::TransitionHash> this role does not require
+transitions to respond to the C<name> method, but as a consequence you must
+refer to the transitions by value.
 
 Note that you may construct like this:
 

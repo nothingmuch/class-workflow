@@ -48,6 +48,8 @@ isa_ok( my $i = $w->new_instance, "Class::Workflow::Instance::Simple" );
 
 is( $i->state, $new, "initial state" );
 
+is( $new->get_transition("accept"), $accept, "get_transition" );
+
 isa_ok( my $i_accepted = $accept->apply( $i ), "Class::Workflow::Instance::Simple");
 
 is( $i_accepted->state, $w->state("open"), "new state is correct" );

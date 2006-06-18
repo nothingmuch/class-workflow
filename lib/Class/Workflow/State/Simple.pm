@@ -6,7 +6,7 @@ use Moose;
 # FIXME with Class::Workflow::State should be implied
 with qw/
 	Class::Workflow::State
-	Class::Workflow::State::TransitionSet
+	Class::Workflow::State::TransitionHash
 	Class::Workflow::State::AcceptHooks
 	Class::Workflow::State::AutoApply
 /;
