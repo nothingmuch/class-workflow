@@ -22,10 +22,34 @@ has body => (
 	default => sub { sub { return () } },
 );
 
+has set_fields => (
+	isa => "HashRef",
+	is  => "rw",
+	default => sub { {} },
+);
+
+# if set_fields is set it overrides rv_to_instance
+has rv_to_instance => (
+	isa => "Bool",
+	is  => "rw",
+	accessor => "rv_to_instance",
+	default => 0,
+);
+
 sub apply_body {
 	my ( $self, $instance, @args ) = @_;
 	my $body = $self->body;
-	$self->$body( $instance, @args );
+
+	# if we have a predefined set of fields
+	unless ( $self->rv_to_instance ) {
+		return (
+			$self->set_fields,
+			$self->$body( $instance, @args ),
+		);
+	} else {
+		# otherwise let the body control everything
+		return $self->$body( $instance, @args );
+	}
 }
 
 __PACKAGE__;

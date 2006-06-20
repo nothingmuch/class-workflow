@@ -11,37 +11,19 @@ has to_state => (
 	required => 0,
 );
 
-has rv_to_instance => (
-	isa => "Bool",
-	is  => "rw",
-	default => 0,
-);
-
 # FIXME augment + inner
 requires "apply_body";
-
-sub separate_rv {
-	my ( $self, $instance, @rv ) = @_;
-
-	if ( $self->rv_to_instance ) {
-		return \@rv, ();
-	} else {
-		return [], @rv;
-	}
-}
 
 sub apply {
 	my ( $self, $instance, @args ) = @_;
 
-	my ( $set_instance_attrs, @rv ) = $self->separate_rv(
-		$instance,
-		$self->apply_body( $instance, @args ),
-	);
+	my ( $set_instance_attrs, @rv ) = $self->apply_body( $instance, @args );
+	$set_instance_attrs ||= {}; # should really die if it's bad
 
 	my $new_instance = $self->derive_and_accept_instance(
 		$instance => {
 			state       => ( $self->to_state || croak "$self has no 'to_state'" ),
-			@$set_instance_attrs,
+			%$set_instance_attrs,
 		},
 		@args,
 	);
@@ -98,10 +80,6 @@ dynamically (probably not a good idea).
 
 The target state of the transition. Should do L<Class::Workflow::State>.
 
-=item rv_to_instance
-
-See C<separate_rv>.
-
 =back
 
 =head1 METHODS
@@ -111,19 +89,7 @@ See C<separate_rv>.
 =item apply
 
 In scalar context returns the derived instance, in list caller also returns the
-return value from C<apply_body>, as munged by C<separate_rv>.
-
-=item separate_rv $insatnce, @rv
-
-This is called with the insatnce and the return value from C<apply_body>.
-
-It separates the fields to override in the instance from the return value to
-the caller.
-
-Currently it's all or nothing, one way or the other - C<rv_to_instance> governs
-whether or not the entire return value is treated as a list of key/value pairs
-to override in the instance or whther the entire return value is returned to
-the caller.
+remaining return value from C<apply_body>.
 
 =back
 
@@ -135,13 +101,16 @@ the caller.
 
 The "inner" body of the function.
 
+This method is always evaluated in list context, and is expected to return a
+hash reference of overridden fields as the first value in that list.
+
 In the future instead of defining C<apply_body> you will do:
 
 	augment apply => sub {
 		# body
 	};
 
-And this role's C<apply> will use C<inner()>.
+And this role's C<apply> will really use C<inner()>.
 
 =back
 
