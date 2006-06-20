@@ -11,9 +11,12 @@ isa_ok( my $w = Class::Workflow->new, "Class::Workflow" );
 
 my $new = $w->state(
 	"new",
-	transitions => [
-		[ reject => ( to_state => "rejected" )],
-	],
+	transitions => [qw/reject/],
+);
+
+$w->transition(
+	name     => "reject",
+	to_state => "rejected",
 );
 
 isa_ok( $new, "Class::Workflow::State::Simple" );
