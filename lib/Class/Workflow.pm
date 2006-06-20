@@ -125,8 +125,14 @@ sub construct_[% field %] {
 }
 
 sub autovivify_[% field %]s {
-	my ( $self, @things ) = @_;
-	map { $self->[% field %]($_) } @things;
+	my ( $self, $thing ) = @_;
+
+	no warnings 'uninitialized';
+	if ( ref $thing eq "ARRAY" ) {
+		return [ map { $self->[% field %]( $_ ) } @$thing ];
+	} else {
+		return $self->[% field %]( $thing );
+	}
 }
 
 sub create_or_set_[% field %] {
@@ -154,10 +160,12 @@ no tt;
 sub expand_attrs {
 	my ($self, $attrs ) = @_;
 
-	# TODO generalize with Data::Visitor and a list of suspect attrs
-	$attrs->{transitions} = [ $self->autovivify_transitions( @{ $attrs->{transitions} } ) ] if exists $attrs->{transitions};
-	$attrs->{transition}  = $self->transition( $attrs->{transition} ) if exists $attrs->{transition};
-	$attrs->{to_state}    = $self->state( $attrs->{to_state} ) if exists $attrs->{to_state};
+	foreach my $key ( keys %$attrs ) {
+		if ( my ( $type ) = ( $key =~ /(transition|state)/ ) ) {
+			my $method = "autovivify_${type}s";
+			$attrs->{$key} = $self->$method( $attrs->{$key} );
+		}
+	}
 }
 
 __PACKAGE__;
