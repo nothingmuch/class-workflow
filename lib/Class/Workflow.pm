@@ -702,6 +702,18 @@ create a new one.
 
 =back
 
+=head1 AUTHOR
+
+Yuval Kogman <nothingmuch@woobling.org>
+
+=head1 COPYRIGHT & LICENSE
+
+	Copyright (c) 2006 Infinity Interactive, Yuval Kogman. All rights
+	reserved. This program is free software; you can redistribute
+	it and/or modify it under the same terms as Perl itself.
+
+=cut
+
 =head1 SEE ALSO
 
 L<Workflow> - Chris Winters' take on workflows - it wasn't simple enough for me
