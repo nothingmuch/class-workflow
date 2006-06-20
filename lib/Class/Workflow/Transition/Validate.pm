@@ -5,10 +5,24 @@ use Moose::Role;
 
 requires "validate";
 
-before apply => sub {
+around apply => sub {
+	my $next = shift;
 	my ( $self, $instance, @args ) = @_;
-	$self->validate( $instance, @args );
+
+	local $@;
+	eval { $self->validate( $instance, @args ) };
+
+	if ( $@ ) {
+		return $self->validation_error( $@, $instance, @args );
+	} else {
+		return $self->$next( $instance, @args );
+	}
 };
+
+sub validation_error {
+	my ( $self, $error, $instance, @args ) = @_;
+	die $error;
+}
 
 __PACKAGE__;
 

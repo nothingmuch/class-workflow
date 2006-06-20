@@ -5,6 +5,11 @@ use Moose;
 
 with "Class::Workflow::Instance";
 
+has error => (
+	isa => "Undef|Str|Object",
+	is  => "ro",
+);
+
 __PACKAGE__;
 
 __END__
