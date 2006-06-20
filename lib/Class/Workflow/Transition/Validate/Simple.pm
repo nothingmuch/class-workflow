@@ -8,6 +8,17 @@ with qw/
 	Class::Workflow::Transition::Validate
 /;
 
+has error_state => (
+	does => "Class::Workflow::State",
+	is   => "rw",
+);
+
+has no_die => (
+	isa => "Bool",
+	is  => "rw",
+	default => 0,
+);
+
 has validators => (
 	isa => "ArrayRef",
 	is  => "rw",
@@ -53,6 +64,26 @@ sub validate {
 	return 1;
 }
 
+sub validation_error {
+	my ( $self, $error, $instance, @args ) = @_;
+
+	if ( my $state = $self->error_state ) {
+		return $self->derive_instance( $instance,
+			state => $state,
+			error => $error
+		);
+	} else {
+		if ( $self->no_die ) {
+			return $self->derive_instance( $instance,
+				state => $instance->state,
+				error => $error,
+			);
+		} else {
+			die $error;
+		}
+	}
+}
+
 __PACKAGE__;
 
 __END__
@@ -77,7 +108,7 @@ Class::Workflow::Transition::Validate::Simple - Easier validation code.
 
 =head1 DESCRIPTION
 
-=head1 METHODS
+=head1 FIELDS
 
 =over 4
 
@@ -86,6 +117,20 @@ Class::Workflow::Transition::Validate::Simple - Easier validation code.
 This is useful if your validators only throw exceptions.
 
 Defaults to false
+
+=item error_transition
+
+This contains a transition that will be applied if a validation error occurs.
+
+Think of it as a catch block for workflows.
+
+Should an error occur this transition will be applied
+
+=back
+
+=head1 METHODS
+
+=over 4
 
 =item validators
 
