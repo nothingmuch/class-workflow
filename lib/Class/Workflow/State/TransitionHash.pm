@@ -25,9 +25,13 @@ sub _reindex_hash {
 	my $self = shift;
 	my @transitions = $self->transitions;
 
-	$_->can("name")
-		or croak "All transitions registered with a hash based state must know their own name"
-			for @transitions;
+	for ( @transitions ) {
+		blessed($_)
+			or croak "$_ is not an object";
+
+		$_->can("name")
+			or croak "All transitions registered with a hash based state must know their own name";
+	}
 
 	$self->transition_hash({ map { $_->name => $_ } @transitions });
 }
