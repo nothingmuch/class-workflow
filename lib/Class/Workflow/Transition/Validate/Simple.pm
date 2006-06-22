@@ -72,15 +72,21 @@ sub validation_error {
 	chomp $error unless ref $error;
 
 	if ( my $state = $self->error_state ) {
-		return $self->derive_instance( $instance,
-			state => $state,
-			error => $error
+		return $self->derive_and_accept_instance(
+			$instance => {
+				state => $state,
+				error => $error
+			},
+			@args
 		);
 	} else {
 		if ( $self->no_die ) {
-			return $self->derive_instance( $instance,
-				state => $instance->state,
-				error => $error,
+			return $self->derive_and_accept_instance(
+				$instance => {
+					state => $instance->state,
+					error => $error,
+				},
+				@args
 			);
 		} else {
 			die $error;
