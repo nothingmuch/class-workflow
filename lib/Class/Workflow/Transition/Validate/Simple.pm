@@ -128,13 +128,22 @@ This is useful if your validators only throw exceptions.
 
 Defaults to false
 
-=item error_transition
+=item error_state
 
-This contains a transition that will be applied if a validation error occurs.
+This contains a state that will be moved to if a validation error occurs.
 
-Think of it as a catch block for workflows.
+In conjunction with L<Class::Workflow::State::AutoApply> this can work like a
+catch block.
 
-Should an error occur this transition will be applied
+The instance will have the C<error> attribute set.
+
+=item no_die
+
+If this is set, C<validation_error> will not die even if C<error_state> is
+not set.
+
+The instance will have the C<error> attribute set, and will be reaccepted into
+it's current state, with the error.
 
 =back
 
