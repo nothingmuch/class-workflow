@@ -4,26 +4,50 @@ package Class::Workflow::State::AutoApply;
 use Moose::Role;
 
 use Carp qw/croak/;
-
-sub BUILD {
-	my $self = shift;
-	if ( my $auto = $self->auto_transition ) {
-		unless ( $self->has_transition($auto) ){
-			unless ( $self->can("add_transitions") ) {
-				croak "$self must support the add_transitions method if "
-				. "you don't put the auto_transition in the transitions list"
-			}
-
-			$self->add_transitions($auto);
-		}
-	}
-}
+use Scalar::Util qw/refaddr/;
 
 has auto_transition => (
-	does => "Class::Workflow::Transition",
-	is   => "rw",
-	required => 0,
+	does      => "Class::Workflow::Transition",
+	accessor  => "auto_transition",
+	required  => 0,
 );
+
+around transitions => sub {
+	my $next = shift;
+	my ( $self, @transitions ) = @_;
+
+	my @ret = $self->$next( @transitions );
+
+	# if the auto transition was not in ->transitions( @set ) then delete it
+	if ( @transitions and my $auto = $self->auto_transition ) {
+		$self->auto_transition(undef) unless grep { $_ == $auto } @transitions;
+	}
+
+	if ( my $auto = $self->auto_transition ) {
+		return $auto, @ret;
+	} else {
+		return @ret;
+	}
+};
+
+around has_transition => sub {
+	my $next = shift;
+	my ( $self, $transition ) = @_;
+
+	no warnings 'uninitialized';
+	return ( $self->$next($transition) || ( refaddr($self->auto_transition) == refaddr($transition) ) );
+};
+
+around has_transitions => sub {
+	my $next = shift;
+	my ( $self, @transitions ) = @_;
+
+	if ( my $auto = $self->auto_transition ) {
+		@transitions = grep { $_ != $auto } @transitions;
+	}
+
+	return $self->$next( @transitions );
+};
 
 around accept_instance => sub {
 	my $next = shift;
