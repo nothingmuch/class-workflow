@@ -11,7 +11,7 @@ sub derive_and_accept_instance {
 	my ( $self, $proto_instance, $attrs, @args ) = @_;
 
 	croak "You must specify the next state of the instance"
-		unless exists $attrs->{state};
+		unless $attrs->{state};
 
 	my $state = $attrs->{state};
 
