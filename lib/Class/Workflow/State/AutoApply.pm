@@ -3,6 +3,22 @@
 package Class::Workflow::State::AutoApply;
 use Moose::Role;
 
+use Carp qw/croak/;
+
+sub BUILD {
+	my $self = shift;
+	if ( my $auto = $self->auto_transition ) {
+		unless ( $self->has_transition($auto) ){
+			unless ( $self->can("add_transitions") ) {
+				croak "$self must support the add_transitions method if "
+				. "you don't put the auto_transition in the transitions list"
+			}
+
+			$self->add_transitions($auto);
+		}
+	}
+}
+
 has auto_transition => (
 	does => "Class::Workflow::Transition",
 	is   => "rw",
