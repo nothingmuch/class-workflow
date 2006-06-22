@@ -49,7 +49,8 @@ sub validate {
 
 	my @errors;
 	foreach my $validator ( $self->validators ) {
-		my $ok = eval { $self->$validator->( $instance, @args ) };
+		local $@;
+		my $ok = eval { $self->$validator( $instance, @args ) };
 
 		if ( $@ ) {
 			push @errors, $@;
