@@ -3,6 +3,8 @@
 package Class::Workflow::State::Simple;
 use Moose;
 
+use overload '""' => "stringify", fallback => 1;
+
 # FIXME with Class::Workflow::State should be implied
 with qw/
 	Class::Workflow::State
@@ -15,6 +17,14 @@ has name => (
 	isa => "Str",
 	is  => "rw",
 );
+
+sub stringify {
+	my $self = shift;
+	if ( defined( my $name = $self->name ) ) {
+		return $name;
+	}
+	return overload::StrVal($_[0]);
+}
 
 __PACKAGE__;
 
