@@ -27,7 +27,7 @@ sub _reindex_hash {
 
 	for ( @transitions ) {
 		blessed($_)
-			or croak "$_ is not an object";
+			or croak (($_||'') . " is not an object");
 
 		$_->can("name")
 			or croak "All transitions registered with a hash based state must know their own name";
