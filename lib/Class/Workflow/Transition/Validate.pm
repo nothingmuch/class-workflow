@@ -9,11 +9,15 @@ around apply => sub {
 	my $next = shift;
 	my ( $self, $instance, @args ) = @_;
 
-	local $@;
-	eval { $self->validate( $instance, @args ) };
+	my $error;
+	{
+		local $@;
+		eval { $self->validate( $instance, @args ) };
+		$error = $@;
+	}
 
-	if ( $@ ) {
-		return $self->validation_error( $@, $instance, @args );
+	if ( $error ) {
+		return $self->validation_error( $error, $instance, @args );
 	} else {
 		return $self->$next( $instance, @args );
 	}
