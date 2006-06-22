@@ -289,9 +289,9 @@ $w->transition(
 );
 
 $w->state(
-	name => "invalid_password",
+	name            => "invalid_password",
 	auto_transition => "reset_user",
-)->add_transitions( $w->transition("reset_user") );
+);
 
 $w->transition(
 	name       => "reset_user",
