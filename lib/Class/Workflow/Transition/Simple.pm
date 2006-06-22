@@ -3,6 +3,8 @@
 package Class::Workflow::Transition::Simple;
 use Moose;
 
+use overload '""' => "stringify", fallback => 1;
+
 # FIXME with Class::Workflow::Transition should not be necessary
 with qw/
 	Class::Workflow::Transition
@@ -15,6 +17,14 @@ has name => (
 	isa => "Str",
 	is  => "rw",
 );
+
+sub stringify {
+	my $self = shift;
+	if ( defined( my $name = $self->name ) ) {
+		return $name;
+	}
+	return overload::StrVal($_[0]);
+}
 
 has body => (
 	isa => "CodeRef",
