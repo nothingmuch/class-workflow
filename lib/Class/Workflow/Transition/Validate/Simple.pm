@@ -59,7 +59,9 @@ sub validate {
 		}
 	}
 
-	die "Transition input validation error: @errors" if @errors;
+	s/ at .* line \d+\.\n//s for @errors;
+
+	die join(", ", @errors) . "\n" if @errors;
 	# FIXME add @errors to an exception object that stringifies
 
 	return 1;
@@ -67,6 +69,7 @@ sub validate {
 
 sub validation_error {
 	my ( $self, $error, $instance, @args ) = @_;
+	chomp $error unless ref $error;
 
 	if ( my $state = $self->error_state ) {
 		return $self->derive_instance( $instance,
