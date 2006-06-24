@@ -7,6 +7,8 @@ use Class::Workflow::State::Simple;
 use Class::Workflow::Transition::Simple;
 use Class::Workflow::Instance::Simple;
 
+our $VERSION = "0.01_01";
+
 use Carp qw/croak/;
 
 has initial_state => (
