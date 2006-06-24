@@ -25,7 +25,12 @@ sub transitions {
 	my ( $self, @transitions ) = @_;
 
 	if ( @transitions ) {
+		# special case to allow set-as-array-ref
+		no warnings 'uninitialized';
+		@transitions = @{ $transitions[0] } if @transitions == 1 and ref($transitions[0]) eq "ARRAY";
+
 		$self->transition_set( Set::Object->new( @transitions ) );
+
 		return @transitions;
 	} else {
 		return $self->transition_set->members;
