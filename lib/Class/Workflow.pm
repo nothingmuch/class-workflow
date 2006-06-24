@@ -326,7 +326,7 @@ The bug is being worked on right now.
 
 Pass the bug to someone else.
 
-Target state: C<up_for_grabs>.
+Target state: C<unassigned>.
 
 =item fixed
 
@@ -336,7 +336,7 @@ Target state: C<awaiting_approval>.
 
 =back
 
-=item up_for_grabs
+=item unassigned
 
 The bug is waiting for a developer to take it.
 
