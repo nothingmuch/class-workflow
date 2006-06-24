@@ -497,7 +497,7 @@ Then, when we apply the transition a bit differently:
 
 		# if your state supports named transitions	
 		my $accept = $current_state->get_transition( "accept" )
-			or die "There's no 'accept' transition in the current state";
+			or croak "There's no 'accept' transition in the current state";
 
 		my $c = MyWorkflowContext->new( user => $current_user );
 		my $wi_accepted = $accept->apply( $wi, $c );
