@@ -113,7 +113,7 @@ Class::Workflow::YAML - Load workflow definitions from YAML files.
 	          to_state: closed
 	        - name    : unresolved
 	          to_state: open
-	    - name: unassigned:
+	    - name: unassigned
 	      transitions:
 	        - name    : take
 	          to_state: open
