@@ -583,6 +583,18 @@ arrive at the current state. These two fields should probably be serialized as
 symbolic references (for example, C<< $instance->state->name >>), unless you
 want a copy some of the workflow definitions store in the instance as well.
 
+=head1 ROLES AND CLASSES
+
+Most of the Class::Workflow system is implemented using roles to specify
+interfaces with reusable behavior, and then ::Simple classes which mash up a
+bunch of useful roles.
+
+This means that you have a very large amount of flexibility in how you compose
+your state/transition objects, allowing good integration with most existing
+software.
+
+This is achieved using L<Moose>, specifically L<Moose::Role>.
+
 =head1 THIS CLASS
 
 L<Class::Workflow> objects are utility objects to help you create workflows and
