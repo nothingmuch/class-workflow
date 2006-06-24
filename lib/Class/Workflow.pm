@@ -619,6 +619,18 @@ Instantiate the workflow
 
 Set the starting state of instances.
 
+=item states
+
+=item transitions
+
+Return all the registered states or transitions.
+
+=item state_names
+
+=item transition_names
+
+Return all the registered state or transition names.
+
 =item state
 
 =item transition
