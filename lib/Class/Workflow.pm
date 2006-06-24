@@ -777,6 +777,14 @@ dynamic system).
 L<http://is.tm.tue.nl/research/patterns/> - lots of explanation and lovely
 flash animations.
 
+L<Class::Workflow::YAML> - load workflow definitions from YAML files.
+
+L<Class::Workflow::Transition::Simple>, L<Class::Workflow::State::Simple>,
+L<Class::Workflow::Instance::Simple> - easy, useful classes that perform all
+the base roles.
+
+L<Moose>
+
 =cut
 
 
