@@ -10,6 +10,7 @@ use Class::Workflow::Instance::Simple;
 our $VERSION = "0.01_01";
 
 use Carp qw/croak/;
+use Scalar::Util qw/refaddr/;
 
 has initial_state => (
 	isa => "Str | Object",
@@ -97,7 +98,8 @@ sub add_[% field %] {
 	my ( $self, $name, $obj ) = @_;
 	
 	if ( exists $self->_[% field %]s->{$name} ) {
-		die unless $obj == $self->_[% field %]s->{$name};
+		croak "$name already exists, delete it first."
+			unless refaddr($obj) == refaddr($self->_[% field %]s->{$name});
 		return $obj;
 	} else {
 		return $self->_[% field %]s->{$name} = $obj;
