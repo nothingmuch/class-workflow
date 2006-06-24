@@ -38,11 +38,10 @@ has set_fields => (
 	default => sub { {} },
 );
 
-# if set_fields is set it overrides rv_to_instance
-has rv_to_instance => (
+# if set_fields is set it overrides body_sets_fields
+has body_sets_fields => (
 	isa => "Bool",
 	is  => "rw",
-	accessor => "rv_to_instance",
 	default => 0,
 );
 
@@ -51,7 +50,7 @@ sub apply_body {
 	my $body = $self->body;
 
 	# if we have a predefined set of fields
-	unless ( $self->rv_to_instance ) {
+	unless ( $self->body_sets_fields ) {
 		return (
 			$self->set_fields,
 			$self->$body( $instance, @args ),
@@ -80,7 +79,7 @@ writing transitions.
 	my $t = Class::Workflow::Transition::Simple->new(
 		name           => "feed",
 		to_state       => $not_hungry, # Class::Workflow::Transition::State
-		rv_to_instance => 1,
+		body_sets_fields => 1,
 		body           => sub {
 			my ( $self, $instance, @args ) = @_;
 

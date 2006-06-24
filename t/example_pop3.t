@@ -265,10 +265,10 @@ $w->state("disconnecting");
 # transitions for the authorization state
 
 $w->transition(
-	name           => "user",
-	to_state       => "authorization_accepting_password",
-	rv_to_instance => 1,
-	body           => sub {
+	name             => "user",
+	to_state         => "authorization_accepting_password",
+	body_sets_fields => 1,
+	body             => sub {
 		my ( $self, $instance, $c, $username ) = @_;
 		return { user => $username }, "user ok, enter password",
 	},
