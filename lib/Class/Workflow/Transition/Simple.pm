@@ -107,20 +107,39 @@ object like C<Class::Workflow> if any.
 This is the state the transition will transfer to. This comes from
 C<Class::Workflow::Transition::Deterministic>.
 
-=item ignore_rv
-
-Whether or not to ignore the return value from the transition body. Defaults to
-true.
-
 =item body
 
 This is an optional sub (it defaults to C<<sub { }>>) which will be called
-during apply, after any validation.
-
-It can return a list of key/value pairs, that will be passed to
-C<derive_and_accept_instance> as long as C<ignore_rv> is set to false
+during apply, after all validation has passed.
 
 The body is invoked as a method on the transition.
+
+See C<body_sets_fields> for the semantics of the return value.
+
+=item body_sets_fields
+
+When true, then the body is expected to return a hash of fields to override in
+the instance. See L<Class::Workflow::Transition::Deterministic> for details.
+
+This field is present to avoid writing code like this:
+
+	return ( {}, @return_values );
+
+When you don't want to set fields in the instance.
+
+Defaults to false (just write return @return_value, set to true to set fields).
+
+See also C<set_fields>.
+
+=item set_fields
+
+This field is a hash ref that will be used as the list of fields to set on the
+instance when C<body_sets_fields> is false.
+
+If your transition does not need to dynamically set fields you should probably
+use this.
+
+Defaults to C<{}>.
 
 =item validate
 
