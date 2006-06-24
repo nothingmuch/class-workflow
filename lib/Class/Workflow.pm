@@ -52,6 +52,16 @@ has _[% field %]s => (
 	default => sub { return {} },
 );
 
+sub [% field %]s {
+	my $self = shift;
+	values %{ $self->_[% field %]s };
+}
+
+sub [% field %]_names {
+	my $self = shift;
+	keys %{ $self->_[% field %]s };
+}
+
 sub [% field %] {
 	my ( $self, @params ) = @_;
 
