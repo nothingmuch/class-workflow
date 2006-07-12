@@ -71,3 +71,35 @@ sub _compare_values {
 __PACKAGE__;
 
 __END__
+
+=pod
+
+=head1 NAME
+
+Class::Workflow::Util::Delta - calculate deltas between workflow instances
+
+=head1 SYNOPSIS
+
+	my $next = $transition->apply( $i );
+
+	my $d = Class::Workflow::Util::Delta->new(
+		from => $i,
+		to   => $next,
+	);
+
+	foreach my $field ( keys %{ $d->changes } ) {
+		my $change = $d->changes->{$field};
+		print "$field changed from $change->{from} to $change->{to}\n";
+	}
+
+=head1 DESCRIPTION
+
+Usually you need to calculate deltas between workflow instances in order to
+normalize the database of history changes so that there are no duplicate
+fields.
+
+This module lets you create an object that represents the change between any
+two instances (not necessarily related), allowing you to represent a history
+step.
+
+See L<Class::Workflow::YAML>
