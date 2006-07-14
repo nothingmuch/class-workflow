@@ -14,7 +14,7 @@ Module::Build->new(
 		'Set::Object'   => '0.15',
 	},
 	reccomends => {
-		'YAML::Syck' => '0.46_01',
+		'YAML::Syck' => '0.60',
 	},
 	create_makefile_pl => 'traditional',
 	sign => 1,
