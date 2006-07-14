@@ -45,14 +45,13 @@ sub _compute_changes {
 
 	# FIXME implies that accessors have been generated.. NOT NECESSARILY THE CASE
 	foreach my $attr ( grep { $_->name !~ /^(?:prev|state|transition)$/ } @attrs ) {
-		my $name = $attr->name;
 		my $res = $self->_compare_values(
 			$attr,
-			$from->$name,
-			$to->$name,
+			$attr->get_value( $from ),
+			$attr->get_value( $to ),
 		);
 
-		$changes{$name} = $res if $res;
+		$changes{$attr->name} = $res if $res;
 	}
 
 	return \%changes;
