@@ -43,7 +43,6 @@ sub _compute_changes {
 
 	my @attrs = $from->meta->compute_all_applicable_attributes;
 
-	# FIXME implies that accessors have been generated.. NOT NECESSARILY THE CASE
 	foreach my $attr ( grep { $_->name !~ /^(?:prev|state|transition)$/ } @attrs ) {
 		my $res = $self->_compare_values(
 			$attr,
