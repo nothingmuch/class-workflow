@@ -7,11 +7,11 @@ use Moose::Util::TypeConstraints;
 use Set::Object;
 
 subtype 'Set::Object'
-	=> as Object
+	=> as 'Object'
 	=> where { $_[0]->isa("Set::Object") };
 
 coerce "Set::Object"
-	=> from ArrayRef
+	=> from 'ArrayRef'
 	=> via { Set::Object->new(@{ $_[0] }) };
 
 has transitions => (
