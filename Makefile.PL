@@ -8,7 +8,8 @@ WriteMakefile
                            'Moose' => '0.09_03',
                            'Set::Object' => '0.15',
                            'Test::More' => '0',
-                           'Test::use::ok' => '0'
+                           'Test::use::ok' => '0',
+						   'Data::Compare' => '0',
                          },
           'INSTALLDIRS' => 'site',
           'EXE_FILES' => [],
