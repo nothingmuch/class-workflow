@@ -1,0 +1,14 @@
+0.05
+	- YAML, not YAML::Syck should be the skip cond in the yaml test
+
+0.04
+	- Fix the .pmc file *again*
+
+0.03
+	- Add Data::Compare to prereqs
+
+0.02
+	- Fix borked .pmc file
+
+0.01
+	- Initial release
