@@ -11,7 +11,7 @@ WriteMakefile
 		'Test::More'    => 0,
 		'Test::use::ok' => 0,
 		'Data::Compare' => 0,
-		eval { require YAML::Syck } ? do { warn "yes"; 'YAML::Syck' => '0.82' } : (),
+		eval { require YAML::Syck } ? do { 'YAML::Syck' => '0.82' } : (),
 	},
 	INSTALLDIRS  => 'site',
 	EXE_FILES    => [],
