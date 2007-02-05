@@ -167,13 +167,9 @@ Calls C<< Class::Workflow->new >>
 
 =item localize_yaml_env
 
-A wrapper method to locally set C<$YAML::UseCode> to 1.
+A wrapper method to locally set C<$YAML::Syck::UseCode> to 1.
 
 =back
-
-=head1 TODO
-
-Switch to L<YAML::Syck> once it gets support for C<!perl/code> nodes.
 
 =head1 SEE ALSO
 
