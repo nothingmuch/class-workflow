@@ -7,7 +7,7 @@ use Class::Workflow::State::Simple;
 use Class::Workflow::Transition::Simple;
 use Class::Workflow::Instance::Simple;
 
-our $VERSION = "0.05";
+our $VERSION = "0.06";
 
 use Carp qw/croak/;
 use Scalar::Util qw/refaddr/;
