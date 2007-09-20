@@ -26,6 +26,13 @@ sub stringify {
 	return overload::StrVal($_[0]);
 }
 
+has misc => (
+	isa => "HashRef",
+	is  => "rw",
+	default    => sub { {} },
+	auto_deref => 1,
+);
+
 __PACKAGE__;
 
 __END__
