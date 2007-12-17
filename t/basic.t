@@ -9,8 +9,16 @@ use ok "Class::Workflow";
 
 isa_ok( my $w = Class::Workflow->new, "Class::Workflow" );
 
+{
+	package My::Custom::State;
+	use Moose;
+
+	extends "Class::Workflow::State::Simple";
+}
+
 my $new = $w->state(
 	"new",
+	class       => "My::Custom::State",
 	transitions => [qw/reject/],
 );
 

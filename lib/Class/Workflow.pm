@@ -134,8 +134,9 @@ sub create_[% field %] {
 }
 
 sub construct_[% field %] {
-	my ( $self, @attrs ) = @_;
-	$self->[% field %]_class->new( @attrs );
+	my ( $self, %attrs ) = @_;
+	my $class = delete($attrs{class}) || $self->[% field %]_class;
+	$class->new( %attrs );
 }
 
 sub autovivify_[% field %]s {
