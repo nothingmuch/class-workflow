@@ -6,7 +6,7 @@ use warnings;
 use Test::More;
 
 BEGIN {
-	plan skip_all => "This test requires YAML to be installed" unless eval { require YAML::Syck };
+	plan skip_all => "This test requires YAML::Syck to be installed" unless eval { require YAML::Syck };
 	plan tests => 10;
 }
 
