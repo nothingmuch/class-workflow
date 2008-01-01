@@ -382,7 +382,7 @@ Target state: C<open>
 =item closed
 
 This is, like rejected, an end state (it has no transitions).
-gg
+
 =back
 
 If you read through this very simple state machine you can see that it
