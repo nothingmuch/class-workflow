@@ -1,6 +1,7 @@
 0.08
 	- Allow 'class' param to Class::Workflow->{state,transition}() in order to
 	  facilitate per object custom classes
+	- Add a fully featured and documented DBIC example
 
 0.07
 	- Unbreak dist
