@@ -23,7 +23,12 @@ has state => ( # the state the instance is currently in
 
 sub derive {
 	my ( $self, @fields ) = @_;
-	return $self->meta->clone_object( $self, @fields, prev => $self );
+	$self->_clone( @fields, prev => $self );
+}
+
+sub _clone {
+	my ( $self, @fields ) = @_;
+	return $self->meta->clone_object( $self, @fields );
 }
 
 __PACKAGE__;
