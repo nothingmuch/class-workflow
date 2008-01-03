@@ -294,7 +294,16 @@ Class::Workflow - Light weight workflow system.
 Workflow systems let you build a state machine, with transitions between
 states.
 
-=head1 BUG TRACKER EXAMPLE
+=head1 EXAMPLES
+
+There are several examples in the F<examples> directory, worth looking over to
+help you understand and to learn some more advanced things.
+
+The most important example is probably how to store a workflow definition (the
+states and transitions) as well as the instances using L<DBIx::Class> in a
+database.
+
+=head2 Bug Tracker Example
 
 One of the simplest examples of a workflow which you've probably used is a bug
 tracking application:
