@@ -31,7 +31,13 @@ the other ::Simple classes.
 
 =head1 DESCRIPTION
 
-See L<Class::Workflow::Instance>.
+This method adds an error field to L<Class::Workflow::Instance>.
+
+In the event that you want to make errors non-fatal, but instead encapsulate
+errors in the workflow using their own states, C<error> just becomes a regular
+field. L<Class::Workflow::Transition::Validate::Simple> provides a simple means
+to add validation, with the optional notion of an C<error_state> for
+transitions.
 
 =head1 FIELDS
 
