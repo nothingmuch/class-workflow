@@ -807,7 +807,7 @@ Yuval Kogman <nothingmuch@woobling.org>
 
 =head1 COPYRIGHT & LICENSE
 
-	Copyright (c) 2006 Infinity Interactive, Yuval Kogman. All rights
+	Copyright (c) 2006-2008 Infinity Interactive, Yuval Kogman. All rights
 	reserved. This program is free software; you can redistribute
 	it and/or modify it under the same terms as Perl itself.
 
