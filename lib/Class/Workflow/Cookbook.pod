@@ -167,4 +167,44 @@ This solution is more compact on disk but involves a lot more work.
 If you'd like to additionally have an editable, persistent workflow definition
 in the database, look at F<examples/dbic>.
 
+=head1 MULTIPLE INSTANCES
+
+Complex workflows may involve branch and sync points for instances.
+
+Branching is trivial due to the purely functional design of
+L<Class::Workflow::Instance>:
+
+	my $instance = ...;
+
+	my $branch_a_instance = $transition_a->apply( $instance, ... );
+
+	my $branch_b_instance = $transition_b->apply( $instance, ... );
+
+	$branch_b_instance->prev == $branch_a_instance->prev == $instance;
+
+There are no built in facilities for synchronization though. The process
+generally involves two instances converging on a single state:
+
+	my ( $instance_a, $instance_b ) = ...; # two separate instances
+
+	my $new_a = $transition_a->apply( $instance_a, ... );
+
+	my $new_b = $transition_b->apply( $instance_b, ... );
+
+	$new_a == $new_b; # the transitions point to the same state
+
+	my $merged = $some_helper->merge( $new_a, $new_b );
+
+this is very specific to your changing needs, so no reusable solution is
+packaged with L<Class::Workflow>.
+
+The simplest way to go about this is to make a custom type of instance that
+provides multiple C<prev> entries.
+
+Merging of fields is yet another concern. 3 way merge algorithms exist but will
+probably not naively work.
+
+If a concrete pattern does emerge from your work please feel free to submit it
+to the cookbook, release it on the CPAN, etc.
+
 =cut
