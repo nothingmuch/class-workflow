@@ -22,26 +22,66 @@ Class::Workflow::Context - The context in which a transition is being applied
 
 =head1 SYNOPSIS
 
-	use Class::Workflow::Context;
+	use Class::Workflow::Context; # or a subclass or something
+
+	my $c = Class::Workflow::Context->new( ... );
+
+	my $new_instance = $transition->apply( $instance, $c );
 
 =head1 DESCRIPTION
 
-If you need to pass arbitrary arguments to the workflow, like the user who is
-trying to apply a transition to the instance, or something like that then you
-should probably use a Context object.
+If you need to pass arbitrary arguments to the workflow, a context object will
+usually help.
 
-The Context object provides C<stash>, a writable hash which is essentially
-free-for-all, but also allows you to add various utility methods and fields on
-your own.
+This specific context object provides C<stash>, a writable hash which is
+essentially free-for-all.
 
-The only code that should manipulate a context within the application is within
-the application of a transition.
+L<Class::Workflow::Context> doesn't provide much and should generally be
+subclassed. It is designed to resemble the L<Catalyst> context object.
 
-=head1 DUCK TYPING
+Usage of a context object is completely optional, and L<Class::Workflow>'s
+other core objects (L<Class::Workflow::State>, L<Class::Workflow::Transition>,
+and L<Class::Workflow::Instance> really don't care about context objects at
+all).
 
-This class should not be considered mandatory or formal in any way - it's just
-a convenient role that the first argument to standardized transition code
-should do.
+=head1 STYLE GUIDE
+
+When writing a workflow that governs a web application, for example,
+transitions will generally expect explicit parameters, having to do with their
+specific responsibility, and more "global" parameters, like on behalf of which
+user is this transition being applied.
+
+A context object is a way to provide a standard set of facilities that every
+transition can expect.
+
+	sub apply {
+		my ( $self, $instance, $c, %args ) = @_;
+
+		my $arg = $args{arg_i_care_about};
+
+		my $user = $c->user;
+
+		...
+	}
+
+Conceptually C<$c> is akin to the environment the workflow is being used in,
+wheras C<%args> are the actual parameters.
+
+Note that this is only one of many possible conventions you can use in your
+workflow system.
+
+The context should probably not be mutated by the workflow itself. That's what
+the workflow instance is for.
+
+=head1 FIELDS
+
+=over 4
+
+=item stash
+
+Just a simple hash reference.
+
+=back
 
 =cut
 
