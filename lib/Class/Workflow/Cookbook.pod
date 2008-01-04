@@ -124,6 +124,59 @@ Using that role validation and application become two somewhat distinct steps,
 and errors in validation prevent actual application from happening, allowing a
 consistent state to be preserved.
 
+=head1 SERIALIZATION
+
+Serialzing your instances is a problem related to L</PERSISTENCE>.
+
+However, there are more solutions than just keeping the instance in the
+database.
+
+If your workflow is dynamic and the transition bodies are not closure
+attributes of the transition class, but a real method, then theoretically you
+can just serialize the instance, and the workflow definition will be serialized
+along side it due to the links to C<state>, C<transition> and C<prev>.
+
+Usually this solution isn't so useful though, and you want just the instance
+definitions, so the best solution is to go through the instance fields and just
+serialize that:
+
+	sub unpack_instance {
+		my ( $self, $instance ) = @_;
+
+		my %attrs = map { $_->name } $instance->meta->compute_all_applicable_attributes;
+
+		my ( $state, $transition, $prev ) = delete @attrs{qw(state transition prev)};
+
+		$self->_unpack_instance( $instance, $state, $transition, $prev, values %attrs );
+	}
+
+	sub _unpack_instance {
+		my ( $self, $instance, @attrs ) = @_;
+		my ( $state, $transition, $prev, @reg_attrs ) = @attrs;
+
+		return {
+			prev       => $self->_unpack_instance( $prev->get_value($instance), @attrs ),
+			state      => $state->get_value($instance)->name, # or some other ID
+			transition => $transitions->get_value($instance)->name,
+			map { $_->name => $_->get_value($instance) } @attrs,
+		}
+	}
+
+	sub pack_instance {
+		my ( $self, $instance, $wf ) = @_;
+
+		MyInstance->new(
+			%$instance,
+			prev       => $self->pack_instance( $instance->{prev}, $wf ),
+			state      => $wf->get_state( $instance->{state} ),
+			transition => $wf->get_transition( $instance->{transition} ),
+		);
+	}
+
+If you're doing this in a web application make sure to use L<Digest::HMAC> or
+something like that to authenticate the data, or the user could inject data
+into your workflow.
+
 =head1 PERSISTENCE
 
 There are two levels of persistence you could be concerned about. The first,
