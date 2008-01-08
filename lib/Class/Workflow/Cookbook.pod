@@ -141,35 +141,37 @@ definitions, so the best solution is to go through the instance fields and just
 serialize that:
 
 	sub unpack_instance {
-		my ( $self, $instance ) = @_;
-
-		my %attrs = map { $_->name } $instance->meta->compute_all_applicable_attributes;
-
-		my ( $state, $transition, $prev ) = delete @attrs{qw(state transition prev)};
-
-		$self->_unpack_instance( $instance, $state, $transition, $prev, values %attrs );
+	my ( $self, $instance ) = @_;
+		my %attrs = map { $_->name => $_ } instance->meta->compute_all_applicable_attributes;
+	my ( $state, $transition, $prev ) = delete @attrs{qw(state transition prev)};
+	return $self->__deflate_workflow_instance( $instance, $state, $transition, $prev, values %attrs );
 	}
 
 	sub _unpack_instance {
 		my ( $self, $instance, @attrs ) = @_;
 		my ( $state, $transition, $prev, @reg_attrs ) = @attrs;
-
+		return unless $instance;
+		$state      = $state->get_value($instance);
+		$transition = $transition->get_value($instance);
+		$prev = $self->__deflate_workflow_instance( $prev->get_value($instance), @attrs );
 		return {
-			prev       => $self->_unpack_instance( $prev->get_value($instance), @attrs ),
-			state      => $state->get_value($instance)->name, # or some other ID
-			transition => $transitions->get_value($instance)->name,
-			map { $_->name => $_->get_value($instance) } @attrs,
+			$prev       ? ( prev       => $prev )             : (),
+			$state      ? ( state      => $state->name )      : (),
+			$transition ? ( transition => $transition->name ) : (),
+			map { $_->name => $_->get_value($instance) } @reg_attrs
 		}
 	}
 
-	sub pack_instance {
+	sub pack_instance => as {
 		my ( $self, $instance, $wf ) = @_;
+		return unless $instance;
+		my $prev = $self->_inflate_workflow_instance( $instance->{prev}, $wf );
 
-		MyInstance->new(
+		$wf->instance_class->new(
 			%$instance,
-			prev       => $self->pack_instance( $instance->{prev}, $wf ),
-			state      => $wf->get_state( $instance->{state} ),
-			transition => $wf->get_transition( $instance->{transition} ),
+			$prev ? ( prev => $prev ) : (),
+			$instance->{state} ? ( state => $wf->get_state( $instance->{state} ) ) : (),
+			$instance->{transition} ? ( transition => $wf->get_transition( $instance->{transition} ) ) : (),
 		);
 	}
 
