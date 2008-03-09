@@ -27,9 +27,30 @@ sub derive {
 }
 
 sub _clone {
-	my ( $self, @fields ) = @_;
-	return $self->meta->clone_object( $self, @fields );
+	my ( $self, %fields ) = @_;
+
+	my %clear;
+
+	foreach my $key ( %fields ) {
+		if ( not defined $fields{$key} ) {
+			delete $fields{$key};
+			$clear{$key} = 1;
+		}
+	}
+
+	my $clone = $self->meta->clone_object( $self, %fields );
+
+    foreach my $attr ($self->meta->compute_all_applicable_attributes()) {
+        if ( defined( my $init_arg = $attr->init_arg ) ) {
+            if (exists $clear{$init_arg}) {
+				$attr->clear_value($clone);
+			}
+		}
+	}
+
+	return $clone;
 }
+
 
 __PACKAGE__;
 
@@ -99,6 +120,9 @@ fields with new values from the key value pair list in the arguments.
 The low level clone operation. If you need to override L<Moose> based cloning,
 because your instance objects are e.g. L<DBIx::Class> objects (see the
 F<examples> directory), then you would likely want to override this.
+
+As a special case values of C<undef> in %fields will cause the clearer to be
+called, not the setter.
 
 =back
 
