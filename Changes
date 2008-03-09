@@ -1,3 +1,6 @@
+0.09
+	- Update for more recent Moose
+
 0.08
 	- Allow 'class' param to Class::Workflow->{state,transition}() in order to
 	  facilitate per object custom classes
