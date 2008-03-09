@@ -345,7 +345,7 @@ $w->transition(
 my $serv = POP3::Server->new(
 	users => {
 		foo => "secret",
-	},	
+	},
 );
 
 
