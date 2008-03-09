@@ -164,7 +164,7 @@ use ok "Class::Workflow::Context";
 				$connection->$status( $response );
 			};
 
-			$connection->err( "Internal error" ) if $@;
+			$connection->err( "Internal error: $@" ) if $@;
 		} else {
 			$connection->err( "Invalid command" );
 		}
