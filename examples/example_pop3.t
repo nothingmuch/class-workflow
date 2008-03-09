@@ -115,6 +115,7 @@ use ok "Class::Workflow::Context";
 		isa => "POP3::Workflow::Instance",
 		is  => "rw",
 		default => sub { $Workflow->new_instance() },
+		clearer => "clear_workflow_instance",
 	);
 
 	has connection => (
@@ -130,7 +131,7 @@ use ok "Class::Workflow::Context";
 
 		if ( $i->state->name eq "disconnecting" ) {
 			$self->connection->close;
-			$self->workflow_instance( undef );
+			$self->clear_workflow_instance;
 			return;
 		}
 
