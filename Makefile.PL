@@ -6,8 +6,8 @@ WriteMakefile
 	NAME         => 'Class::Workflow',
 	VERSION_FROM => 'lib/Class/Workflow.pm',
 	PREREQ_PM    => {
-		'Moose'         => '0.17',
-		'Set::Object'   => '0.15',
+		'Moose'         => '0.37',
+		'Set::Object'   => '1.19',
 		'Test::More'    => 0,
 		'Test::use::ok' => 0,
 		'Data::Compare' => 0,
