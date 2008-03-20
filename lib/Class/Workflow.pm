@@ -579,19 +579,13 @@ Persistence in workflows involves saving the workflow instance as a
 relationship of the item whose state it represents, or even treating the
 instance as the actual item.
 
-In any case, right now there are no persistence layers available. In the close
-future advanced L<DBIx::Class> persistence of both workflow definitions and
-instances will be available.
+In any case, right now there are no turnkey persistence layers available.
 
-For the mean while I suggest you simply serialize the instance object's fields.
-If you need history, serialize recursively with C<prev> (although you may not
-want to do this every time).
+A fully working L<DBIx::Class> example can be found in the F<examples/dbic>
+directory, but setup is manual. Serialization based persistence (with e.g.
+L<Storable>) is trivial as well.
 
-Additionally the instance has the fields C<state> and C<transition>, which
-contain references to the current state and the transition which was applied to
-arrive at the current state. These two fields should probably be serialized as
-symbolic references (for example, C<< $instance->state->name >>), unless you
-want a copy some of the workflow definitions store in the instance as well.
+See L<Class::Workflow::Cookbook> for more details.
 
 =head1 ROLES AND CLASSES
 
