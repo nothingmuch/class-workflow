@@ -141,10 +141,10 @@ definitions, so the best solution is to go through the instance fields and just
 serialize that:
 
 	sub unpack_instance {
-	my ( $self, $instance ) = @_;
+		my ( $self, $instance ) = @_;
 		my %attrs = map { $_->name => $_ } instance->meta->compute_all_applicable_attributes;
-	my ( $state, $transition, $prev ) = delete @attrs{qw(state transition prev)};
-	return $self->__deflate_workflow_instance( $instance, $state, $transition, $prev, values %attrs );
+		my ( $state, $transition, $prev ) = delete @attrs{qw(state transition prev)};
+		return $self->__deflate_workflow_instance( $instance, $state, $transition, $prev, values %attrs );
 	}
 
 	sub _unpack_instance {
