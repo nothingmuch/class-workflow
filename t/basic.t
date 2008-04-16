@@ -58,6 +58,10 @@ isa_ok( my $i = $w->new_instance, "Class::Workflow::Instance::Simple" );
 
 is( $i->state, $new, "initial state" );
 
+ok( $i->state->has_transition('accept'), 'state has accept transition' );
+ok( $i->state->has_transitions, 'state has transitions');
+ok( !$i->state->has_transition('notexist'), 'state does not have notexist transition');
+
 is( $new->get_transition("accept"), $accept, "get_transition" );
 
 isa_ok( my $i_accepted = $accept->apply( $i ), "Class::Workflow::Instance::Simple");
