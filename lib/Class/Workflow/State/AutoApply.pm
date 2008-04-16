@@ -9,6 +9,7 @@ use Scalar::Util qw/refaddr/;
 has auto_transition => (
 	does      => "Class::Workflow::Transition",
 	accessor  => "auto_transition",
+	predicate => "has_auto_transition",
 	required  => 0,
 );
 
@@ -34,19 +35,15 @@ around has_transition => sub {
 	my $next = shift;
 	my ( $self, $transition ) = @_;
 
-	no warnings 'uninitialized';
-	return ( $self->$next($transition) || ( refaddr($self->auto_transition) == refaddr($transition) ) );
-};
-
-around has_transitions => sub {
-	my $next = shift;
-	my ( $self, @transitions ) = @_;
-
 	if ( my $auto = $self->auto_transition ) {
-		@transitions = grep { $_ != $auto } @transitions;
+		if ( ref $transition ) {
+			return 1 if refaddr($auto) == refaddr($transition);
+		} else {
+			return 1 if $auto->can("name") and $auto->name eq $transition;
+		}
 	}
 
-	return $self->$next( @transitions );
+	return $self->$next($transition);
 };
 
 around accept_instance => sub {
