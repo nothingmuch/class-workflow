@@ -73,6 +73,18 @@ workflow system.
 The context should probably not be mutated by the workflow itself. That's what
 the workflow instance is for.
 
+=head1 CONTEXT ROLES
+
+You are encouraged to create roles for additional paremeters in the context,
+and compose them together into the final workflow class instead of relying on
+C<stash>.
+
+This provides a more structured approach, and lets you use C<lazy_build> in the
+attributes cleanly.
+
+You could also apply runtime roles to the workflow class for a more dynamic and
+flexible solution.
+
 =head1 FIELDS
 
 =over 4
