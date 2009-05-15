@@ -40,7 +40,7 @@ sub _clone {
 
 	my $clone = $self->meta->clone_object( $self, %fields );
 
-    foreach my $attr ($self->meta->compute_all_applicable_attributes()) {
+    foreach my $attr ($self->meta->get_all_attributes()) {
         if ( defined( my $init_arg = $attr->init_arg ) ) {
             if (exists $clear{$init_arg}) {
 				$attr->clear_value($clone);

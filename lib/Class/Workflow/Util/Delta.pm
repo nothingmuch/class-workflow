@@ -41,7 +41,7 @@ sub _compute_changes {
 
 	my ( $from, $to ) = ( $self->from, $self->to );
 
-	my @attrs = $from->meta->compute_all_applicable_attributes;
+	my @attrs = $from->meta->get_all_attributes;
 
 	foreach my $attr ( grep { $_->name !~ /^(?:prev|state|transition)$/ } @attrs ) {
 		my $res = $self->_compare_values(
