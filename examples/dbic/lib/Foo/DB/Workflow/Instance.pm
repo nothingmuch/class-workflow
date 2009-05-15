@@ -48,9 +48,9 @@ initial state. A rel to this table.
 
 =over 4
 
-=item _clone
+=item clone
 
-This overrides L<Class::Workflow::Instance/_clone> to use
+This overrides L<Class::Workflow::Instance/clone> to use
 L<DBIx::Class::Row/copy> instead of L<Class::MOP::Class/clone_object>.
 
 =back
@@ -97,7 +97,7 @@ __PACKAGE__->belongs_to( transition => "Foo::DB::Workflow::Transition" );
 
 __PACKAGE__->belongs_to( prev => __PACKAGE__ ); # history
 
-sub _clone {
+sub clone {
 	my ( $self, @fields ) = @_;
 	$self->copy({@fields});
 }

@@ -3,6 +3,8 @@
 package Class::Workflow::Instance;
 use Moose::Role;
 
+with 'MooseX::Clone';
+
 has prev => ( # the instance this instance was derived from
 	does     => "Class::Workflow::Instance",
 	is       => "ro",
@@ -23,34 +25,32 @@ has state => ( # the state the instance is currently in
 
 sub derive {
 	my ( $self, @fields ) = @_;
-	$self->_clone( @fields, prev => $self );
+	$self->clone( @fields, prev => $self );
 }
 
 sub _clone {
-	my ( $self, %fields ) = @_;
+	my ( $self, @args ) = @_;
+	$self->clone(@args);
+}
 
-	my %clear;
+# FIXME push this feature to MooseX::Clone by using special values ( \$MooseX::Clone::CLEAR or somesuch )
+around clone => sub {
+	my ( $next, $self, %fields ) = @_;
 
-	foreach my $key ( %fields ) {
-		if ( not defined $fields{$key} ) {
-			delete $fields{$key};
-			$clear{$key} = 1;
-		}
-	}
+	my @clear = grep { not defined $fields{$_} } keys %fields;
 
-	my $clone = $self->meta->clone_object( $self, %fields );
+	delete @fields{@clear};
 
-    foreach my $attr ($self->meta->get_all_attributes()) {
-        if ( defined( my $init_arg = $attr->init_arg ) ) {
-            if (exists $clear{$init_arg}) {
-				$attr->clear_value($clone);
-			}
-		}
+	my $clone = $self->$next(%fields);
+
+	my $meta = Class::MOP::get_metaclass_by_name(ref $self);
+
+	foreach my $field ( @clear ) {
+		$meta->find_attribute_by_name($field)->clear_value($clone);
 	}
 
 	return $clone;
-}
-
+};
 
 __PACKAGE__;
 
@@ -115,14 +115,13 @@ The transition that created this instance from C<prev>.
 Clones the object, setting C<prev> to the current object, and shadowing the
 fields with new values from the key value pair list in the arguments.
 
-=item _clone %fields
+=item clone %fields
 
 The low level clone operation. If you need to override L<Moose> based cloning,
 because your instance objects are e.g. L<DBIx::Class> objects (see the
 F<examples> directory), then you would likely want to override this.
 
-As a special case values of C<undef> in %fields will cause the clearer to be
-called, not the setter.
+See L<MooseX::Clone> for more details.
 
 =back
 
