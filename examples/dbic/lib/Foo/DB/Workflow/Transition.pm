@@ -94,21 +94,21 @@ __PACKAGE__->add_columns(
 	class => {
 		data_type => "varchar",
 		is_nullable => 0,
+		accessor => '_class',
 	},
 	
 );
 
-# allow changing of the class
-around class => sub {
-	my $next = shift;
+
+sub class {
 	my ( $self, @args ) = @_;
 
-	my $class = $self->$next(@args);
+	my $class = $self->_class(@args);
 
 	$self->_rebless_to_transaction_class( $class ) if @args;
 
 	$class;
-};
+}
 
 sub new {
 	my ( $class, @args ) = @_;
