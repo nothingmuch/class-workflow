@@ -181,15 +181,30 @@ into your workflow.
 
 =head1 PERSISTENCE
 
-There are two levels of persistence you could be concerned about. The first,
-more trivial one is that of the workflow data.
+=head2 KiokuDB
+
+For L<KiokuDB> based storage you needn't do anything to get started.
+
+You probably want to add the C<KiokuDB::Lazy> trait to the various attributes to
+prevent loading of unnecessary objects.
+
+=head2 General concerns
+
+There are two levels of persistence you could choose from. The more
+trivial one is that of the workflow state data.
 
 This means that the workflow definition (states and transitions) is defined and
-redefined from some static location every time the program starts (probably
-it's own C<.pm> file, or L<Class::Workflow::YAML>), but the
-L<Class::Workflow::Instance> objects live in a database.
+from some static location every time the program starts (probably it's own
+C<.pm> file, or L<Class::Workflow::YAML>), but the L<Class::Workflow::Instance>
+objects live in a database. The links to the states must be inflated using the
+static workflow definition.
 
-=head2 Storing Instances
+The other way would be storing the entire workflow definition in persistent
+storage as well (all the state and transition definitions).
+
+=head2 DBIx::Class
+
+=head3 Storing Instances
 
 There are two general approaches for storing L<Class::Workflow::Instance> type
 objects in a data store of some sort.
@@ -217,7 +232,7 @@ from the audit log if necessary.
 
 This solution is more compact on disk but involves a lot more work.
 
-=head2 Storing Everything
+=head3 Storing Everything
 
 If you'd like to additionally have an editable, persistent workflow definition
 in the database, look at F<examples/dbic>.
@@ -256,8 +271,8 @@ packaged with L<Class::Workflow>.
 The simplest way to go about this is to make a custom type of instance that
 provides multiple C<prev> entries.
 
-Merging of fields is yet another concern. 3 way merge algorithms exist but will
-probably not naively work.
+Merging of fields is yet another concern. 3 way merge algorithms exist on the
+CPAN but will probably not work out of the box.
 
 If a concrete pattern does emerge from your work please feel free to submit it
 to the cookbook, release it on the CPAN, etc.
