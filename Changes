@@ -1,3 +1,11 @@
+0.10
+	- use MooseX::Clone for cloning
+	- fix for new warnings from Moose
+	- add by name querying to has_transition
+	- various doc fixes
+	- describe the use of roles in the context definition
+	- describe KiokuDB in the PERSISTENCE section of the cookbook
+
 0.09
 	- Update for more recent Moose
 
