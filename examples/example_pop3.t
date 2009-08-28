@@ -71,9 +71,9 @@ use ok "Class::Workflow::Context";
 		required => 1,
 	);
 
-	has mail_store => (
-		# ...
-	);
+	#has mail_store => (
+	#	...
+	#);
 
 	sub verify_user_password {
 		my ( $self, $user, $password ) = @_;
@@ -175,9 +175,9 @@ use ok "Class::Workflow::Context";
 
 	extends "Class::Workflow::Instance::Simple";
 
-	has server => (
-		# ...
-	);
+	#has server => (
+	#	...
+	#);
 
 	has user => (
 		isa => "Str",
